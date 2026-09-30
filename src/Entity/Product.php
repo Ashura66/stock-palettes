@@ -34,6 +34,9 @@ class Product
     #[ORM\Column(length: 50, unique: true)]
     private ?string $sku = null;
 
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?Category $category = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -119,6 +122,18 @@ class Product
     public function setSku(string $sku): static
     {
         $this->sku = $sku;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }

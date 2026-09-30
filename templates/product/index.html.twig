@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produits{% endblock %}
+
+{% block body %}
+    <h1>Produits</h1>
+
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr>
+                <th>SKU</th>
+                <th>Nom</th>
+                <th>Catégorie</th>
+                <th>Stock</th>
+                <th>Minimum</th>
+                <th>Statut</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>{{ product.sku }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.category ? product.category.name : '-' }}</td>
+                    <td>{{ product.currentStock }} {{ product.unit }}</td>
+                    <td>{{ product.minStock }}</td>
+                    <td>
+                        {% if product.currentStock < product.minStock %}
+                            Stock bas
+                        {% else %}
+                            OK
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
