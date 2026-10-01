@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mouvements de stock{% endblock %}
+
+{% block body %}
+    <h1>Mouvements de stock</h1>
+
+    <p><a href="{{ path('app_movement_new') }}">Nouveau mouvement</a></p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Produit</th>
+                <th>Type</th>
+                <th>Quantité</th>
+                <th>Motif</th>
+                <th>Par</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for movement in movements %}
+            <tr>
+                <td>{{ movement.createdAt|date('d/m/Y H:i') }}</td>
+                <td>{{ movement.product.name }}</td>
+                <td>{{ movement.type.label }}</td>
+                <td>{{ movement.quantity }}</td>
+                <td>{{ movement.reason }}</td>
+                <td>{{ movement.createdBy.name }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Aucun mouvement.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
