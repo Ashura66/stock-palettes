@@ -3,6 +3,9 @@
 {% block title %}Stock et Palettes{% endblock %}
 
 {% block body %}
+    {% if app.user %}
+        <p>Connecté : {{ app.user.name }} — <a href="{{ path('app_logout') }}">Déconnexion</a></p>
+    {% endif %}
     <h1>Stock et Palettes</h1>
     <p>Mon premier écran Symfony.</p>
     <p><a href="{{ path('app_product_index') }}">Voir les produits</a></p>

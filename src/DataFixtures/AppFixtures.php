@@ -6,9 +6,14 @@ use App\Entity\Category;
 use App\Entity\Product;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use App\Entity\User;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    public function __construct(private UserPasswordHasherInterface $hasher)
+    {
+    }
     public function load(ObjectManager $manager): void
     {
         $categories = [];
@@ -38,6 +43,19 @@ class AppFixtures extends Fixture
                 ->setIsActive(true)
                 ->setCategory($categories[$cat]);
             $manager->persist($product);
+        }
+
+        $users = [
+            ['admin@stock.test', 'Admin', ['ROLE_ADMIN'], 'admin1234'],
+            ['operateur@stock.test', 'Opérateur', ['ROLE_OPERATOR'], 'operateur1234'],
+        ];
+        foreach ($users as [$email, $name, $roles, $plain]) {
+            $user = (new User())
+                ->setEmail($email)
+                ->setName($name)
+                ->setRoles($roles);
+            $user->setPassword($this->hasher->hashPassword($user, $plain));
+            $manager->persist($user);
         }
 
         $manager->flush();
