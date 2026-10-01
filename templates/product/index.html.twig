@@ -1,39 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Produits{% endblock %}
+{% block title %}Product index{% endblock %}
 
 {% block body %}
-    <h1>Produits</h1>
+    <h1>Product index</h1>
 
-    <table border="1" cellpadding="6">
+    <table class="table">
         <thead>
             <tr>
-                <th>SKU</th>
-                <th>Nom</th>
-                <th>Catégorie</th>
-                <th>Stock</th>
-                <th>Minimum</th>
-                <th>Statut</th>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Unit</th>
+                <th>ParcelsPerPallet</th>
+                <th>MinStock</th>
+                <th>CurrentStock</th>
+                <th>IsActive</th>
+                <th>Sku</th>
+                <th>actions</th>
             </tr>
         </thead>
         <tbody>
-            {% for product in products %}
-                <tr>
-                    <td>{{ product.sku }}</td>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.category ? product.category.name : '-' }}</td>
-                    <td>{{ product.currentStock }} {{ product.unit }}</td>
-                    <td>{{ product.minStock }}</td>
-                    <td>
-                        {% if product.currentStock < product.minStock %}
-                            Stock bas
-                        {% else %}
-                            OK
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
+        {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.unit }}</td>
+                <td>{{ product.parcelsPerPallet }}</td>
+                <td>{{ product.minStock }}</td>
+                <td>{{ product.currentStock }}</td>
+                <td>{{ product.isActive ? 'Yes' : 'No' }}</td>
+                <td>{{ product.sku }}</td>
+                <td>
+                    <a href="{{ path('app_product_show', {'id': product.id}) }}">show</a>
+                    <a href="{{ path('app_product_edit', {'id': product.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
-{% endblock %}
 
+    <a href="{{ path('app_product_new') }}">Create new</a>
+{% endblock %}

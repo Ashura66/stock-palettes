@@ -4,8 +4,11 @@ namespace App\Entity;
 
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[UniqueEntity(fields: ['sku'], message: 'Ce SKU existe déjà.')]
 class Product
 {
     #[ORM\Id]
@@ -14,28 +17,38 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 150)]
+    #[Assert\NotBlank(message: 'Le nom est obligatoire.')]
+    #[Assert\Length(max: 150)]
     private ?string $name = null;
 
     #[ORM\Column(length: 20)]
+    #[Assert\NotBlank(message: "L'unité est obligatoire.")]
+    #[Assert\Length(max: 20)]
     private ?string $unit = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Positive(message: 'Doit être supérieur à 0.')]
     private ?int $parcelsPerPallet = null;
 
     #[ORM\Column]
+    #[Assert\PositiveOrZero(message: 'Ne peut pas être négatif.')]
     private ?int $minStock = null;
 
     #[ORM\Column]
+    #[Assert\PositiveOrZero(message: 'Ne peut pas être négatif.')]
     private ?int $currentStock = null;
 
     #[ORM\Column]
     private ?bool $isActive = null;
 
     #[ORM\Column(length: 50, unique: true)]
+    #[Assert\NotBlank(message: 'Le SKU est obligatoire.')]
+    #[Assert\Length(max: 50)]
     private ?string $sku = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Category $category = null;
+
 
     public function getId(): ?int
     {
